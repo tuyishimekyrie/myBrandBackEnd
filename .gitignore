@@ -1,0 +1,19 @@
+# Dependency directories
+node_modules
+npm-debug.log
+yarn-error.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Environment variables file
+.env
+
+# Build and deployment directories (if applicable)
+/build/
+/dist/
+/out/
+/.next/
+/.nuxt/
+/.vercel/
