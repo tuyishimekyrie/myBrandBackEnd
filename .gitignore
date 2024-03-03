@@ -12,7 +12,7 @@ Thumbs.db
 
 # Build and deployment directories (if applicable)
 /build/
-/dist/
+# /dist/
 /out/
 /.next/
 /.nuxt/
