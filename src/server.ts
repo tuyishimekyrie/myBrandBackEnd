@@ -17,11 +17,20 @@ if (!config.get("jwtPrivateKey")) {
   console.error("Configuration is not set");
   process.exit(1);
 }
+const dbpassword = process.env.dbpassword;
+
+if (!dbpassword) {
+  console.error("FATAL ERROR: dbpassword environment variable is not defined");
+  process.exit(1);
+}
 
 mongoose
-  .connect("mongodb://localhost:27017/mybrand")
+  .connect(
+    `mongodb+srv://tuyishimehope:${dbpassword}@mybrandbackendapi.mcajjcn.mongodb.net/mybrandbackeddb`
+  )
   .then(() => console.log("Database Running"))
   .catch((error) => console.error("Database Connection Failed:", error));
+
 
 const PORT = process.env.PORT || 3000;
 app.use(cookieParser());
