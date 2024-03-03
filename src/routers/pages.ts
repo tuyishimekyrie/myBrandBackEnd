@@ -10,15 +10,15 @@ function redirectToIndexIfLoggedIn(
   res: Response,
   next: NextFunction
 ): void {
-  const token = localStorage.getItem("token"); // Retrieve token from localStorage
+  const token = localStorage.getItem("token"); 
   if (token) {
-    // User is already logged in, redirect to index page
+    
     res.redirect("/index.html");
   } else {
-    // User is not logged in, continue with the registration process
+ 
     next();
   }
 }
 
-// export default redirectToIndexIfLoggedIn;
+
 export default router;

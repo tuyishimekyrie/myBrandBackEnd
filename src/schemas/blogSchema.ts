@@ -81,7 +81,6 @@ import mongoose from "mongoose";
 export const blogSchema = new mongoose.Schema({
   readMoreURL: {
     type: String,
-    // Optionally, you can add validation rules here
   },
   img: {
     type: String,
@@ -93,7 +92,7 @@ export const blogSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  likedBy: [{ type: String }], // Change the type to String
+  likedBy: [{ type: String }], 
   header: {
     type: String,
     required: true,
@@ -129,12 +128,11 @@ export const blogSchema = new mongoose.Schema({
       date: {
         type: Date,
         required: true,
-        default: Date.now, // Default to the current date when not provided
+        default: Date.now, 
       },
       time: {
         type: String,
         required: true,
-        // Default to the current time using a function to prevent it from being set only once during schema compilation
         default: () => new Date().toLocaleTimeString(),
       },
     },

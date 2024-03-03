@@ -118,7 +118,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const token = jwt.sign(tokenPayload, config.get("jwtPrivateKey"));
 
-    // Send the token and isAdmin status as a response body
+    
     res.json({ token, isAdmin: existingUser.isAdmin });
   } catch (error) {
     if (error instanceof Error) {
@@ -131,18 +131,18 @@ export const loginUser = async (req: Request, res: Response) => {
 
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
-    // Fetch all users from the database, excluding the password field
+   
     const users = await User.find({}, { password: 0 });
 
-    // Check if users are found
+   
     if (!users || users.length === 0) {
       return res.status(404).json({ message: "No users found" });
     }
 
-    // Send the users as an object in the response
+    
     res.status(200).json({ users });
   } catch (error) {
-    // Handle errors
+    
     console.error("Error fetching users:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
@@ -150,36 +150,36 @@ export const getAllUsers = async (req: Request, res: Response) => {
 
 export const deleteUser = async (req: Request, res: Response) => {
   try {
-    // Extract user ID from request parameters
+   
     const { id } = req.params;
 
-    // Check if the user exists
+   
     const user = await User.findById(id);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Delete the user from the database
+   
     await User.findByIdAndDelete(id);
 
-    // Send a success message in the response
+   
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
-    // Handle errors
+  
     console.error("Error deleting user:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
 export const getUserCount = async (req: Request, res: Response) => {
   try {
-    // Fetch the count of users from the database
+    
     const userCount = await User.countDocuments();
 
-    // Send the count as a JSON response
+   
     res.status(200).json({ count: userCount });
   } catch (error) {
-    // Handle errors
+  
     console.error("Error fetching user count:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }

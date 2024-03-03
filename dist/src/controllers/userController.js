@@ -101,7 +101,6 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             isAdmin: existingUser.isAdmin,
         };
         const token = jsonwebtoken_1.default.sign(tokenPayload, config_1.default.get("jwtPrivateKey"));
-        // Send the token and isAdmin status as a response body
         res.json({ token, isAdmin: existingUser.isAdmin });
     }
     catch (error) {
@@ -116,17 +115,13 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.loginUser = loginUser;
 const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Fetch all users from the database, excluding the password field
         const users = yield userSchema_1.default.find({}, { password: 0 });
-        // Check if users are found
         if (!users || users.length === 0) {
             return res.status(404).json({ message: "No users found" });
         }
-        // Send the users as an object in the response
         res.status(200).json({ users });
     }
     catch (error) {
-        // Handle errors
         console.error("Error fetching users:", error);
         res.status(500).json({ message: "Internal Server Error" });
     }
@@ -134,20 +129,15 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.getAllUsers = getAllUsers;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Extract user ID from request parameters
         const { id } = req.params;
-        // Check if the user exists
         const user = yield userSchema_1.default.findById(id);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-        // Delete the user from the database
         yield userSchema_1.default.findByIdAndDelete(id);
-        // Send a success message in the response
         res.status(200).json({ message: "User deleted successfully" });
     }
     catch (error) {
-        // Handle errors
         console.error("Error deleting user:", error);
         res.status(500).json({ message: "Internal Server Error" });
     }
@@ -155,13 +145,10 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.deleteUser = deleteUser;
 const getUserCount = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Fetch the count of users from the database
         const userCount = yield userSchema_1.default.countDocuments();
-        // Send the count as a JSON response
         res.status(200).json({ count: userCount });
     }
     catch (error) {
-        // Handle errors
         console.error("Error fetching user count:", error);
         res.status(500).json({ message: "Internal Server Error" });
     }

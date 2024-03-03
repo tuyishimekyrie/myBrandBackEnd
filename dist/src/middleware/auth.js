@@ -11,15 +11,11 @@ function auth(req, res, next) {
         return res.status(401).send("Access denied, no token provided");
     }
     try {
-        // Verify the token
         const decoded = jsonwebtoken_1.default.verify(token.replace("Bearer ", ""), config_1.default.get("jwtPrivateKey"));
-        // Attach the decoded user information to the request object
         req.user = decoded;
-        // Call next middleware
         next();
     }
     catch (ex) {
-        // Handle token verification errors
         if (ex.name === "TokenExpiredError") {
             return res.status(401).send("Access token expired");
         }
@@ -27,7 +23,6 @@ function auth(req, res, next) {
             return res.status(400).send("Invalid token");
         }
         else {
-            // For any other errors, return a generic error message
             return res.status(500).send("Internal Server Error");
         }
     }

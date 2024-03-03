@@ -6,7 +6,6 @@ import blogs from "./routers/blogs";
 import messages from "./routers/messages";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-// import fileUpload from "express-fileupload";
 import bodyParser from "body-parser";
 import swaggerDocs from "./utils/swagger";
 
