@@ -119,7 +119,7 @@ export const loginUser = async (req: Request, res: Response) => {
     const token = jwt.sign(tokenPayload, config.get("jwtPrivateKey"));
 
     
-    res.json({ token, isAdmin: existingUser.isAdmin });
+    res.status(200).json({ token, isAdmin: existingUser.isAdmin });
   } catch (error) {
     if (error instanceof Error) {
       res.status(400).send(error.message);

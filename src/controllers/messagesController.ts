@@ -8,7 +8,7 @@ export const getAllMessages = async (req: Request, res: Response) => {
     res.status(200).json(messages);
   } catch (error) {
     console.error("Error listing messages:", error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 

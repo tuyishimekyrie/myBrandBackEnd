@@ -8,17 +8,21 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import swaggerDocs from "./utils/swagger";
+import createServer from "./utils/serverTest";
 
-const app = express();
+export const app = createServer();
+
 swaggerDocs(app, 3000);
 
 if (!config.get("jwtPrivateKey")) {
   console.error("Configuration is not set");
   process.exit(1);
 }
-const dbpassword = process.env.dbpassword;
+// const dbpassword = process.env.dbpassword;
+const dbpassword = config.get("dbpassword");
 
-if (!dbpassword) {
+
+if (!config.get("dbpassword")) {
   console.error("FATAL ERROR: dbpassword environment variable is not defined");
   process.exit(1);
 }
@@ -47,6 +51,6 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello from the backend!");
 });
 
-app.listen(PORT, () => {
+export const servers = app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

@@ -17,3 +17,5 @@ Thumbs.db
 /.next/
 /.nuxt/
 /.vercel/
+/coverage/
+/tests/

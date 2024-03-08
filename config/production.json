@@ -1,3 +1,6 @@
 {
-  "jwtPrivateKey": "mybrand_jwtPrivateKey"
+  "jwtPrivateKey": "mybrand_jwtPrivateKey",
+  "dbusername": "tuyishimehope",
+  "dbpassword": "tuyishimehope",
+  "dbname": "mybrandbackenddb"
 }
