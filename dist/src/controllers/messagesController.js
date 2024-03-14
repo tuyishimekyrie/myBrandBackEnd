@@ -21,7 +21,7 @@ const getAllMessages = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
     catch (error) {
         console.error("Error listing messages:", error);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json({ message: "Internal Server Error" });
     }
 });
 exports.getAllMessages = getAllMessages;

@@ -73,7 +73,7 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         //   email: existingUser.email,
         //   password: existingUser.password,
         // });
-        res.header("x-auth-token", token).status(201).send("Successfully Created An Account");
+        res.header("x-auth-token", token).status(201).json({ message: "Successfully Created An Account" });
     }
     catch (error) {
         if (error instanceof Error) {
@@ -101,7 +101,7 @@ const loginUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             isAdmin: existingUser.isAdmin,
         };
         const token = jsonwebtoken_1.default.sign(tokenPayload, config_1.default.get("jwtPrivateKey"));
-        res.json({ token, isAdmin: existingUser.isAdmin });
+        res.header("x-auth-token", token).status(200).json({ token, isAdmin: existingUser.isAdmin });
     }
     catch (error) {
         if (error instanceof Error) {

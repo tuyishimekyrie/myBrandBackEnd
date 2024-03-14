@@ -41,7 +41,7 @@ const router = express_1.default.Router();
  *       '403':
  *         description: Forbidden - user is not an admin
  */
-router.get("/", admin_1.default, blogsController_1.listBlogs);
+router.get("/", blogsController_1.listBlogs);
 // router.patch("/update/:id", admin,updateBlog);
 /**
  * @openapi
@@ -176,41 +176,57 @@ cloudinary_1.v2.config({
 // );
 /**
  * @openapi
- * /api/blogs/upload:
- *   post:
- *     tags:
- *       - Blogs
- *     summary: Upload an image and create a blog post
- *     description: Uploads an image and creates a blog post with the provided data.
- *     consumes:
- *       - multipart/form-data
- *     parameters:
- *       - in: formData
- *         name: image
- *         type: file
+ * info:
+ *   title: Blog API
+ *   description: API for managing blog posts and images
+ *   version: 1.0.0
+ * paths:
+ *   /api/blogs/upload:
+ *     post:
+ *       tags:
+ *         - Blogs
+ *       summary: Upload an image and create a blog post
+ *       description: Uploads an image and creates a blog post with the provided data.
+ *       requestBody:
  *         required: true
- *         description: The image file to upload.
- *     security:
- *       - bearerAuth: []
- *       - adminAuth: []
- *     responses:
- *       '200':
- *         description: Blog post created successfully
  *         content:
- *           application/json:
+ *           multipart/form-data:
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   description: Indicates whether the operation was successful.
- *                 message:
+ *                 image:
  *                   type: string
- *                   description: Confirmation message.
- *       '400':
- *         description: Bad request - no image uploaded
- *       '500':
- *         description: Internal Server Error
+ *                   format: binary
+ *                 header:
+ *                   type: string
+ *                   description: Header for the blog post
+ *                 desc:
+ *                   type: string
+ *                   description: Description for the blog post
+ *       security:
+ *         - bearerAuth: []
+ *         - adminAuth: []
+ *       responses:
+ *         '200':
+ *           description: Blog post created successfully
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   success:
+ *                     type: boolean
+ *                     description: Indicates whether the operation was successful.
+ *                   message:
+ *                     type: string
+ *                     description: Confirmation message.
+ *         '400':
+ *           description: Bad request - no image uploaded
+ *         '500':
+ *           description: Internal Server Error
+ * security:
+ *   - bearerAuth: []
+ *   - adminAuth: []
  */
 router.post("/upload", upload.single("image"), admin_1.default, function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -245,62 +261,65 @@ router.post("/upload", upload.single("image"), admin_1.default, function (req, r
 });
 /**
  * @openapi
- * /api/blogs/updates/{id}:
- *   patch:
- *     tags:
- *       - Blogs
- *     summary: Update a blog post
- *     description: Updates a blog post with the provided data.
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *         description: The ID of the blog post to update.
- *       - in: formData
- *         name: image
- *         type: file
- *         description: The updated image file for the blog post.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
+ * info:
+ *   title: Blog API
+ *   description: API for managing blog posts and images
+ *   version: 1.0.0
+ * paths:
+ *   /api/blogs/updates/{id}:
+ *     patch:
+ *       tags:
+ *         - Blogs
+ *       summary: Upload an image and create a blog post
+ *       description: Uploads an image and creates a blog post with the provided data.
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           required: true
  *           schema:
- *             type: object
- *             properties:
- *               header:
- *                 type: string
- *                 description: The updated header of the blog post.
- *               desc:
- *                 type: string
- *                 description: The updated description of the blog post.
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       '200':
- *         description: Blog post updated successfully
+ *             type: string
+ *           description: The ID of the blog to update.
+ *       requestBody:
  *         content:
- *           application/json:
+ *           multipart/form-data:
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   description: Indicates whether the operation was successful.
- *                 message:
+ *                 image:
  *                   type: string
- *                   description: Confirmation message.
- *                 data:
- *                   $ref: '#/components/schemas/Blog'
- *       '400':
- *         description: Bad request - no image uploaded
- *       '404':
- *         description: Blog not found
- *       '500':
- *         description: Internal Server Error
+ *                   format: binary
+ *                 header:
+ *                   type: string
+ *                   description: Header for the blog post. (Optional)
+ *                 desc:
+ *                   type: string
+ *                   description: Description for the blog post. (Optional)
+ *       security:
+ *         - bearerAuth: []
+ *         - adminAuth: []
+ *       responses:
+ *         '200':
+ *           description: Blog post created successfully
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   success:
+ *                     type: boolean
+ *                     description: Indicates whether the operation was successful.
+ *                   message:
+ *                     type: string
+ *                     description: Confirmation message.
+ *         '400':
+ *           description: Bad request - no image uploaded
+ *         '500':
+ *           description: Internal Server Error
+ * security:
+ *   - bearerAuth: []
+ *   - adminAuth: []
  */
-router.patch("/updates/:id", upload.single("image"), function (req, res) {
+router.patch("/updates/:id", admin_1.default, upload.single("image"), function (req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             // Check if req.file exists

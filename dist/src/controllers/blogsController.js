@@ -12,12 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addComment = exports.updateLikes = exports.deleteBlog = exports.updateBlog = exports.listBlogs = void 0;
+exports.addComment = exports.updateLikes = exports.deleteBlog = exports.listBlogs = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const blogSchema_1 = __importDefault(require("../schemas/blogSchema"));
 const cloudinary_1 = require("cloudinary");
 const multer_1 = __importDefault(require("multer"));
 const config_1 = __importDefault(require("config"));
+const userSchema_1 = __importDefault(require("../schemas/userSchema"));
 const listBlogs = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const blogs = yield blogSchema_1.default.find();
@@ -110,38 +111,36 @@ const upload = (0, multer_1.default)({ storage: storage });
 //   }
 // };
 // Configure Cloudinary
-const updateBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { id } = req.params; // Extract the ID of the blog from the request parameters
-        const { header, desc } = req.body; // Extract the updated data from the request body
-        // Check if the blog with the given ID exists
-        const existingBlog = yield blogSchema_1.default.findById(id);
-        if (!existingBlog) {
-            return res.status(404).send("Blog not found");
-        }
-        // Check if a new image file is uploaded
-        if (req.file) {
-            // If a new image is provided, upload it to Cloudinary
-            const cloudinaryResult = yield cloudinary_1.v2.uploader.upload(req.file.path);
-            existingBlog.img = cloudinaryResult.secure_url;
-        }
-        // Update the existing blog with the new data, if provided
-        if (header !== undefined) {
-            existingBlog.header = header;
-        }
-        if (desc !== undefined) {
-            existingBlog.desc = desc;
-        }
-        // Save the updated blog to the database
-        const updatedBlog = yield existingBlog.save();
-        res.status(200).send(updatedBlog); // Send back the updated blog as response
-    }
-    catch (error) {
-        console.error("Error updating blog:", error);
-        res.status(500).send("Internal Server Error");
-    }
-});
-exports.updateBlog = updateBlog;
+// export const updateBlog = async (req: Request, res: Response) => {
+//   try {
+//     const { id } = req.params; // Extract the ID of the blog from the request parameters
+//     const { header, desc } = req.body; // Extract the updated data from the request body
+//     // Check if the blog with the given ID exists
+//     const existingBlog = await Blog.findById(id);
+//     if (!existingBlog) {
+//       return res.status(404).send("Blog not found");
+//     }
+//     // Check if a new image file is uploaded
+//     if (req.file) {
+//       // If a new image is provided, upload it to Cloudinary
+//       const cloudinaryResult = await cloudinary.uploader.upload(req.file.path);
+//       existingBlog.img = cloudinaryResult.secure_url;
+//     }
+//     // Update the existing blog with the new data, if provided
+//     if (header !== undefined) {
+//       existingBlog.header = header;
+//     }
+//     if (desc !== undefined) {
+//       existingBlog.desc = desc;
+//     }
+//     // Save the updated blog to the database
+//     const updatedBlog = await existingBlog.save();
+//     res.status(200).send(updatedBlog); // Send back the updated blog as response
+//   } catch (error) {
+//     console.error("Error updating blog:", error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// };
 const deleteBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params; // Extract the ID of the blog from the request parameters
@@ -267,9 +266,13 @@ const addComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             });
         }
         const decodedToken = jsonwebtoken_1.default.verify(token.replace("Bearer ", ""), jwtPrivateKey);
-        const commenterId = decodedToken.userId;
+        const commenterId = decodedToken._id;
         // Find the blog post by ID
         const blog = yield blogSchema_1.default.findById(id);
+        const user = yield userSchema_1.default.findById(commenterId).select("name");
+        const commenterName = user === null || user === void 0 ? void 0 : user.name;
+        console.log(commenterId);
+        console.log(decodedToken);
         if (!blog) {
             return res
                 .status(404)
@@ -279,6 +282,7 @@ const addComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const newComment = {
             commenterId,
             comment,
+            commenterName,
             date: new Date(),
             time: new Date().toLocaleTimeString(),
         };
