@@ -148,7 +148,7 @@ router.post("/login", loginUser);
  *       '404':
  *         description: Not found - user with the specified ID not found
  */
-router.delete("/delete/:id", auth, deleteUser);
+router.delete("/delete/:id", admin, deleteUser);
 /**
  * @openapi
  * /api/users/getUserCount:

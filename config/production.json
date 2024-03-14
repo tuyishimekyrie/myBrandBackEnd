@@ -2,5 +2,6 @@
   "jwtPrivateKey": "mybrand_jwtPrivateKey",
   "dbusername": "tuyishimehope",
   "dbpassword": "tuyishimehope",
-  "dbname": "mybrandbackenddb"
+  "dbname": "mybrandbackenddb",
+    "db": "mongodb+srv://tuyishimehope:tuyishimehope@mybrandbackendapi.mcajjcn.mongodb.net/mybrandbackeddb"
 }

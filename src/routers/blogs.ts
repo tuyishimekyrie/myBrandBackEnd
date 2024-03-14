@@ -1,6 +1,5 @@
 import express, { Request, NextFunction, Response } from "express";
 import {
-  updateBlog,
   deleteBlog,
   listBlogs,
   updateLikes,

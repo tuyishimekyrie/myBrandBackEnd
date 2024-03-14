@@ -1,3 +1,4 @@
 {
-  "jwtPrivateKey": ""
+  "jwtPrivateKey": "",
+  "db":"mongodb+srv://tuyishimehope:tuyishimehope@mybrandbackendapi.mcajjcn.mongodb.net/mybrandbackeddb"
 }

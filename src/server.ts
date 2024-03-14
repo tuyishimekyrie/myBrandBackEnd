@@ -27,11 +27,13 @@ if (!config.get("dbpassword")) {
   process.exit(1);
 }
 
+const db = config.get('db')
+
 mongoose
   .connect(
-    `mongodb+srv://tuyishimehope:${dbpassword}@mybrandbackendapi.mcajjcn.mongodb.net/mybrandbackeddb`
+   config.get("db")
   )
-  .then(() => console.log("Database Running"))
+  .then(() => console.log("Database Running", db))
   .catch((error) => console.error("Database Connection Failed:", error));
 
 

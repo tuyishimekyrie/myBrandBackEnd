@@ -82,7 +82,7 @@ export const registerUser = async (req: Request, res: Response) => {
     //   email: existingUser.email,
     //   password: existingUser.password,
     // });
-      res.header("x-auth-token", token).status(201).send("Successfully Created An Account");
+    res.header("x-auth-token", token).status(201).json({message: "Successfully Created An Account"});
   } catch (error) {
     if (error instanceof Error) {
       res.status(400).send(error.message);
@@ -119,7 +119,7 @@ export const loginUser = async (req: Request, res: Response) => {
     const token = jwt.sign(tokenPayload, config.get("jwtPrivateKey"));
 
     
-    res.status(200).json({ token, isAdmin: existingUser.isAdmin });
+    res.header("x-auth-token", token).status(200).json({ token, isAdmin: existingUser.isAdmin });
   } catch (error) {
     if (error instanceof Error) {
       res.status(400).send(error.message);
@@ -173,10 +173,9 @@ export const deleteUser = async (req: Request, res: Response) => {
 };
 export const getUserCount = async (req: Request, res: Response) => {
   try {
-    
     const userCount = await User.countDocuments();
 
-   
+    
     res.status(200).json({ count: userCount });
   } catch (error) {
   
