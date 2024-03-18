@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const blogsController_1 = require("../controllers/blogsController");
-// import { createBlog } from "../controllers/createBlogController";
 const admin_1 = __importDefault(require("../middleware/admin"));
 const multer_1 = __importDefault(require("multer"));
 const cloudinary_1 = require("cloudinary");
@@ -42,7 +41,6 @@ const router = express_1.default.Router();
  *         description: Forbidden - user is not an admin
  */
 router.get("/", blogsController_1.listBlogs);
-// router.patch("/update/:id", admin,updateBlog);
 /**
  * @openapi
  * /api/blogs/delete/{id}:
@@ -329,29 +327,25 @@ router.patch("/updates/:id", admin_1.default, upload.single("image"), function (
                     message: "No image uploaded",
                 });
             }
-            const { id } = req.params; // Extract the ID of the blog from the request parameters
-            const { header, desc } = req.body; // Extract the updated data from the request body
-            // Check if the blog with the given ID exists
+            const { id } = req.params;
+            const { header, desc } = req.body;
             const existingBlog = yield blogSchema_1.default.findById(id);
             if (!existingBlog) {
                 return res.status(404).send("Blog not found");
             }
-            // Update the existing blog with the new data, if provided
             if (header !== undefined) {
                 existingBlog.header = header;
             }
             if (desc !== undefined) {
                 existingBlog.desc = desc;
             }
-            // Upload image to Cloudinary
             const cloudinaryResult = yield cloudinary_1.v2.uploader.upload(req.file.path);
-            existingBlog.img = cloudinaryResult.secure_url; // Update the image URL in the existing blog
-            // Save the updated blog to the database
+            existingBlog.img = cloudinaryResult.secure_url;
             const updatedBlog = yield existingBlog.save();
             res.status(200).json({
                 success: true,
                 message: "Blog post updated successfully",
-                data: updatedBlog, // Send back the updated blog post
+                data: updatedBlog,
             });
         }
         catch (error) {

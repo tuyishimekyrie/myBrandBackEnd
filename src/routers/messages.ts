@@ -9,8 +9,7 @@ import admin from "../middleware/admin";
 const router = express.Router();
 
 
-// router.get("/getALL", admin, getAllMessages);
-// router.post("/create", createMessage);
+
 
 /**
  * @openapi

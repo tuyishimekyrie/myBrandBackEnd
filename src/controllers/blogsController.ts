@@ -15,14 +15,11 @@ export const listBlogs = async (req: Request, res: Response) => {
 
     res.status(200).json(blogs);
   } catch (error) {
-    console.error("Error listing blogs:", error);
+    // console.error("Error listing blogs:", error);
     res.status(500).send("Internal Server Error");
   }
 };
 
-// Configure Cloudinary (ensure you have installed and imported the cloudinary package)
-
-// Configure Cloudinary
 cloudinary.config({
   cloud_name: "dvr0mdz82",
   api_key: "969194347389653",
@@ -156,15 +153,13 @@ const upload = multer({ storage: storage });
 
 export const deleteBlog = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params; // Extract the ID of the blog from the request parameters
+    const { id } = req.params;
 
-    // Check if the blog with the given ID exists
     const existingBlog = await Blog.findById(id);
     if (!existingBlog) {
       return res.status(404).send("Blog not found");
     }
 
-    // If the blog exists, delete it from the database
     await Blog.findByIdAndDelete(id);
 
     res.status(200).send("Blog deleted successfully");
@@ -265,7 +260,7 @@ export const updateLikes = async (req: Request, res: Response) => {
       liked: likedIndex === -1, // Indicates whether the user liked or unliked the blog
     });
   } catch (error) {
-    console.error("Error updating blog like:", error);
+    // console.error("Error updating blog like:", error);
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });
@@ -278,14 +273,12 @@ export const addComment = async (req: Request, res: Response) => {
   const token = req.header("x-auth-token");
 
   try {
-    // Check if token is provided
     if (!token) {
       return res
         .status(401)
         .json({ success: false, message: "Access denied. No token provided." });
     }
 
-    // Verify the JWT token and extract user ID
     const jwtPrivateKey = config.get<string>("jwtPrivateKey");
     if (!jwtPrivateKey) {
       return res.status(500).json({
@@ -300,7 +293,6 @@ export const addComment = async (req: Request, res: Response) => {
     ) as { _id: string };
     const commenterId = decodedToken._id;
 
-    // Find the blog post by ID
     const blog = await Blog.findById(id);
     const user = await User.findById(commenterId).select("name")
     const commenterName= user?.name;
@@ -313,7 +305,6 @@ export const addComment = async (req: Request, res: Response) => {
         .json({ success: false, message: "Blog not found" });
     }
 
-    // Construct the new comment object
     const newComment = {
       commenterId,
       comment,
@@ -322,13 +313,10 @@ export const addComment = async (req: Request, res: Response) => {
       time: new Date().toLocaleTimeString(),
     };
 
-    // Add the comment to the blog post
     blog.comments.push(newComment);
 
-    // Increment the commentsCount
     blog.commentsCount++;
 
-    // Save the updated blog post
     await blog.save();
 
     return res.status(201).json({
@@ -337,7 +325,7 @@ export const addComment = async (req: Request, res: Response) => {
       comment: newComment,
     });
   } catch (error) {
-    console.error("Error adding comment:", error);
+    // console.error("Error adding comment:", error);
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });

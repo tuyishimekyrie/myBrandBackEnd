@@ -7,8 +7,6 @@ const express_1 = __importDefault(require("express"));
 const messagesController_1 = require("../controllers/messagesController");
 const admin_1 = __importDefault(require("../middleware/admin"));
 const router = express_1.default.Router();
-// router.get("/getALL", admin, getAllMessages);
-// router.post("/create", createMessage);
 /**
  * @openapi
  * /api/messages/getALL:

@@ -48,30 +48,45 @@ const mongoose_1 = __importDefault(require("mongoose"));
 exports.userSchema = new mongoose_1.default.Schema({
     name: {
         type: String,
-        required: true,
+        // required: true,
         minlength: 3,
         maxlength: 50,
     },
     email: {
         type: String,
-        required: true,
+        // required: true,
         minlength: 5,
         maxlength: 255,
         unique: true,
     },
     password: {
         type: String,
-        required: true,
-        minlength: 5,
-        maxlength: 1024,
+        // required: true,
+        // minlength: 5,
+        // maxlength: 1024,
+        default: "",
     },
     confirmpassword: {
         type: String,
-        required: true,
-        minlength: 5,
-        maxlength: 1024,
+        // required: true,
+        // minlength: 5,
+        // maxlength: 1024,
+        default: "",
     },
-    isAdmin: Boolean,
+    isAdmin: {
+        type: Boolean,
+        default: false
+    },
+    googleId: {
+        type: String,
+        // required: true,
+        unique: true,
+        default: null,
+    },
+    photo: {
+        type: String,
+        default: null,
+    },
 });
 const User = mongoose_1.default.model("User", exports.userSchema);
 exports.default = User;

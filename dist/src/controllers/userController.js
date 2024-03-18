@@ -12,46 +12,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserCount = exports.deleteUser = exports.getAllUsers = exports.loginUser = exports.registerUser = exports.currentUser = void 0;
+exports.getUserCount = exports.deleteUser = exports.getAllUsers = exports.loginUser = exports.registerUser = exports.registerUserWithGoogle = exports.currentUser = void 0;
 const userSchema_1 = __importDefault(require("../schemas/userSchema"));
-const userDtos_1 = require("../Dtos/userDtos");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const config_1 = __importDefault(require("config"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const loginDtos_1 = require("../Dtos/loginDtos");
 const currentUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Get the token from the request headers
         const token = req.header("x-auth-token");
-        // If token is not present, return an error
         if (!token) {
             return res
                 .status(401)
                 .json({ message: "No token, authorization denied" });
         }
-        // Verify the token
         const decoded = jsonwebtoken_1.default.verify(token, config_1.default.get("jwtPrivateKey"));
-        // Find the user based on the decoded user ID
         const user = yield userSchema_1.default.findById(decoded._id).select("-password");
-        // If user not found, return an error
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-        // Send the user data as response
-        res.json(user);
+        res.status(200).json(user);
     }
     catch (error) {
-        // Handle errors
         // console.error("Error getting current user:", error);
         // res.status(500).json({ message: "Internal Server Error" });
-        console.log("Error getting current user:", error);
+        // console.log("Error getting current user:", error);
         res.send({ message: "Internal Server Error" });
     }
 });
 exports.currentUser = currentUser;
+const registerUserWithGoogle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.registerUserWithGoogle = registerUserWithGoogle;
 const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { name, email, password, confirmpassword } = userDtos_1.userSchema.parse(req.body);
+        // const { name, email, password, confirmpassword } = userSchema.parse(
+        //   req.body
+        // ) as UserDtos;
+        const { name, email, password, confirmpassword } = req.body;
         let existingUser = yield userSchema_1.default.findOne({ email: req.body.email });
         if (existingUser) {
             return res.status(400).send("User with this email already registered");
@@ -122,7 +120,7 @@ const getAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(200).json({ users });
     }
     catch (error) {
-        console.error("Error fetching users:", error);
+        // console.error("Error fetching users:", error);
         res.status(500).json({ message: "Internal Server Error" });
     }
 });
@@ -138,7 +136,7 @@ const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(200).json({ message: "User deleted successfully" });
     }
     catch (error) {
-        console.error("Error deleting user:", error);
+        // console.error("Error deleting user:", error);
         res.status(500).json({ message: "Internal Server Error" });
     }
 });
@@ -149,7 +147,7 @@ const getUserCount = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.status(200).json({ count: userCount });
     }
     catch (error) {
-        console.error("Error fetching user count:", error);
+        // console.error("Error fetching user count:", error);
         res.status(500).json({ message: "Internal Server Error" });
     }
 });

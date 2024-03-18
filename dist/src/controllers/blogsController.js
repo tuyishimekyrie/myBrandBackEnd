@@ -25,13 +25,11 @@ const listBlogs = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(200).json(blogs);
     }
     catch (error) {
-        console.error("Error listing blogs:", error);
+        // console.error("Error listing blogs:", error);
         res.status(500).send("Internal Server Error");
     }
 });
 exports.listBlogs = listBlogs;
-// Configure Cloudinary (ensure you have installed and imported the cloudinary package)
-// Configure Cloudinary
 cloudinary_1.v2.config({
     cloud_name: "dvr0mdz82",
     api_key: "969194347389653",
@@ -143,13 +141,11 @@ const upload = (0, multer_1.default)({ storage: storage });
 // };
 const deleteBlog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.params; // Extract the ID of the blog from the request parameters
-        // Check if the blog with the given ID exists
+        const { id } = req.params;
         const existingBlog = yield blogSchema_1.default.findById(id);
         if (!existingBlog) {
             return res.status(404).send("Blog not found");
         }
-        // If the blog exists, delete it from the database
         yield blogSchema_1.default.findByIdAndDelete(id);
         res.status(200).send("Blog deleted successfully");
     }
@@ -239,7 +235,7 @@ const updateLikes = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
     catch (error) {
-        console.error("Error updating blog like:", error);
+        // console.error("Error updating blog like:", error);
         return res
             .status(500)
             .json({ success: false, message: "Internal server error" });
@@ -251,13 +247,11 @@ const addComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const { comment } = req.body;
     const token = req.header("x-auth-token");
     try {
-        // Check if token is provided
         if (!token) {
             return res
                 .status(401)
                 .json({ success: false, message: "Access denied. No token provided." });
         }
-        // Verify the JWT token and extract user ID
         const jwtPrivateKey = config_1.default.get("jwtPrivateKey");
         if (!jwtPrivateKey) {
             return res.status(500).json({
@@ -267,7 +261,6 @@ const addComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
         const decodedToken = jsonwebtoken_1.default.verify(token.replace("Bearer ", ""), jwtPrivateKey);
         const commenterId = decodedToken._id;
-        // Find the blog post by ID
         const blog = yield blogSchema_1.default.findById(id);
         const user = yield userSchema_1.default.findById(commenterId).select("name");
         const commenterName = user === null || user === void 0 ? void 0 : user.name;
@@ -278,7 +271,6 @@ const addComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 .status(404)
                 .json({ success: false, message: "Blog not found" });
         }
-        // Construct the new comment object
         const newComment = {
             commenterId,
             comment,
@@ -286,11 +278,8 @@ const addComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
             date: new Date(),
             time: new Date().toLocaleTimeString(),
         };
-        // Add the comment to the blog post
         blog.comments.push(newComment);
-        // Increment the commentsCount
         blog.commentsCount++;
-        // Save the updated blog post
         yield blog.save();
         return res.status(201).json({
             success: true,
@@ -299,7 +288,7 @@ const addComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         });
     }
     catch (error) {
-        console.error("Error adding comment:", error);
+        // console.error("Error adding comment:", error);
         return res
             .status(500)
             .json({ success: false, message: "Internal server error" });

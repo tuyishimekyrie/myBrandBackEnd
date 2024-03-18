@@ -3,5 +3,7 @@
   "dbusername": "tuyishimehope",
   "dbpassword": "tuyishimehope",
   "dbname": "mybrandbackenddb",
-  "db": "mongodb+srv://tuyishimehope:tuyishimehope@mybrandbackendapi.mcajjcn.mongodb.net/mybrandbackeddb"
+  "db": "mongodb+srv://tuyishimehope:tuyishimehope@mybrandbackendapi.mcajjcn.mongodb.net/mybrandbackeddb",
+  "GOOGLE_CLIENT_ID":"791713133583-k6npq3k3j5vcrt4c0jv9d0qsmve9ddn6.apps.googleusercontent.com",
+"GOOGLE_CLIENT_SECRET": "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"
 }

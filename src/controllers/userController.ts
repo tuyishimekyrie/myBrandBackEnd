@@ -10,47 +10,44 @@ import { LoginDtos, loginSchema } from "../Dtos/loginDtos";
 
 export const currentUser = async (req: Request, res: Response) => {
   try {
-    // Get the token from the request headers
     const token = req.header("x-auth-token");
 
-    // If token is not present, return an error
     if (!token) {
       return res
         .status(401)
         .json({ message: "No token, authorization denied" });
     }
 
-    // Verify the token
     const decoded = jwt.verify(token, config.get("jwtPrivateKey")) as {
       _id: string;
     };
 
-    // Find the user based on the decoded user ID
     const user = await User.findById(decoded._id).select("-password");
 
-    // If user not found, return an error
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Send the user data as response
-    res.json(user);
+    res.status(200).json(user);
   } catch (error) {
-    // Handle errors
     // console.error("Error getting current user:", error);
     // res.status(500).json({ message: "Internal Server Error" });
-    console.log("Error getting current user:", error);
+    // console.log("Error getting current user:", error);
     res.send({ message: "Internal Server Error" });
   }
 };
 
+export const registerUserWithGoogle = async (req: Request, res: Response) => {
+  
+}
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
-    const { name, email, password, confirmpassword } = userSchema.parse(
-      req.body
-    ) as UserDtos;
-
+    // const { name, email, password, confirmpassword } = userSchema.parse(
+    //   req.body
+    // ) as UserDtos;
+ const { name, email, password, confirmpassword } =req.body
+ 
     let existingUser = await User.findOne({ email: req.body.email });
     if (existingUser) {
       return res.status(400).send("User with this email already registered");
@@ -143,7 +140,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
     res.status(200).json({ users });
   } catch (error) {
     
-    console.error("Error fetching users:", error);
+    // console.error("Error fetching users:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -167,7 +164,7 @@ export const deleteUser = async (req: Request, res: Response) => {
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
   
-    console.error("Error deleting user:", error);
+    // console.error("Error deleting user:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
@@ -179,7 +176,7 @@ export const getUserCount = async (req: Request, res: Response) => {
     res.status(200).json({ count: userCount });
   } catch (error) {
   
-    console.error("Error fetching user count:", error);
+    // console.error("Error fetching user count:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };

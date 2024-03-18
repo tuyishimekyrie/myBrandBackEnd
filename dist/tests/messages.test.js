@@ -137,27 +137,18 @@ describe("get all messages", () => {
             throw error;
         }
     }));
-    // it("should return 500 if an internal server error occurs", async () => {
-    //   // Mock an admin user
-    //   const adminUser = new User({ isAdmin: true });
-    //   // Generate a JWT token for the admin user
-    //   const token = jwt.sign(
-    //     { userId: adminUser._id, isAdmin: false },
-    //     config.get("jwtPrivateKey")
-    //   );
-    //   // Mock a function that throws an error when trying to delete a user
-    //   // jest
-    //   //   .spyOn(Message, "find")
-    //   //   .mockRejectedValue(new Error("Something went wrong"));
-    //   // Send a request to delete a user
-    //   const response = await supertest(servers)
-    //     .get(`/api/messages/getMessageCount`)
-    //     .set("x-auth-token", token);
-    //   // Expecting a 500 Internal Server Error response
-    //   expect(response.status).toBe(500);
-    //   // Ensure the correct message is returned
-    //   expect(response.body.message).toBe("Internal Server Error");
-    // });
+    it("should return 500 if an internal server error occurs", () => __awaiter(void 0, void 0, void 0, function* () {
+        const adminUser = new userSchema_1.default({ isAdmin: true });
+        const token = jsonwebtoken_1.default.sign({ _id: adminUser._id, isAdmin: true }, config_1.default.get("jwtPrivateKey"));
+        jest
+            .spyOn(messageSchema_1.default, "find")
+            .mockRejectedValue(new Error("Something went wrong"));
+        const response = yield (0, supertest_1.default)(server_1.servers)
+            .get(`/api/messages/getALL`)
+            .set("x-auth-token", token);
+        expect(response.status).toBe(500);
+        expect(response.body.message).toBe("Internal Server Error");
+    }));
 });
 describe("POST /api/messages/create", () => {
     it("should return Message created successfully", () => __awaiter(void 0, void 0, void 0, function* () {

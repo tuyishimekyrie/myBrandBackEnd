@@ -94,6 +94,7 @@ router.get("/getALL", admin_1.default, userController_1.getAllUsers);
  *         description: Bad request - missing or invalid user data
  */
 router.post("/create", userController_1.registerUser);
+// router.post("/googleregister", registerUserWithGoogle);
 /**
  * @openapi
  * /api/users/login:

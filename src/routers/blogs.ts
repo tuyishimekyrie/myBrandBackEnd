@@ -5,7 +5,6 @@ import {
   updateLikes,
   addComment,
 } from "../controllers/blogsController";
-// import { createBlog } from "../controllers/createBlogController";
 import admin from "../middleware/admin";
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
@@ -34,7 +33,6 @@ const router = express.Router();
  *         description: Forbidden - user is not an admin
  */
 router.get("/", listBlogs);
-// router.patch("/update/:id", admin,updateBlog);
 /**
  * @openapi
  * /api/blogs/delete/{id}:
@@ -350,16 +348,14 @@ router.patch(
         });
       }
 
-      const { id } = req.params; // Extract the ID of the blog from the request parameters
-      const { header, desc } = req.body; // Extract the updated data from the request body
+      const { id } = req.params; 
+      const { header, desc } = req.body;
 
-      // Check if the blog with the given ID exists
       const existingBlog = await Blog.findById(id);
       if (!existingBlog) {
         return res.status(404).send("Blog not found");
       }
 
-      // Update the existing blog with the new data, if provided
       if (header !== undefined) {
         existingBlog.header = header;
       }
@@ -367,17 +363,15 @@ router.patch(
         existingBlog.desc = desc;
       }
 
-      // Upload image to Cloudinary
       const cloudinaryResult = await cloudinary.uploader.upload(req.file.path);
-      existingBlog.img = cloudinaryResult.secure_url; // Update the image URL in the existing blog
+      existingBlog.img = cloudinaryResult.secure_url; 
 
-      // Save the updated blog to the database
       const updatedBlog = await existingBlog.save();
 
       res.status(200).json({
         success: true,
         message: "Blog post updated successfully",
-        data: updatedBlog, // Send back the updated blog post
+        data: updatedBlog, 
       });
     } catch (error) {
       console.error("Error updating blog:", error);
