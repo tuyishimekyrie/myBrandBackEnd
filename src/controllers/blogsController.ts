@@ -294,7 +294,8 @@ export const addComment = async (req: Request, res: Response) => {
     const commenterId = decodedToken._id;
 
     const blog = await Blog.findById(id);
-    const user = await User.findById(commenterId).select("name")
+const user = await User.findById(commenterId).select("name photo");
+
     const commenterName= user?.name;
     console.log(commenterId)
     console.log(decodedToken)
@@ -307,6 +308,7 @@ export const addComment = async (req: Request, res: Response) => {
 
     const newComment = {
       commenterId,
+      photo: user?.photo,
       comment,
       commenterName,
       date: new Date(),

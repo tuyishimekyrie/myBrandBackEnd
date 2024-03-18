@@ -262,7 +262,7 @@ const addComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const decodedToken = jsonwebtoken_1.default.verify(token.replace("Bearer ", ""), jwtPrivateKey);
         const commenterId = decodedToken._id;
         const blog = yield blogSchema_1.default.findById(id);
-        const user = yield userSchema_1.default.findById(commenterId).select("name");
+        const user = yield userSchema_1.default.findById(commenterId).select("name photo");
         const commenterName = user === null || user === void 0 ? void 0 : user.name;
         console.log(commenterId);
         console.log(decodedToken);
@@ -273,6 +273,7 @@ const addComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         }
         const newComment = {
             commenterId,
+            photo: user === null || user === void 0 ? void 0 : user.photo,
             comment,
             commenterName,
             date: new Date(),
