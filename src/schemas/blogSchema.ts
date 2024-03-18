@@ -125,6 +125,9 @@ export const blogSchema = new mongoose.Schema({
         type: String,
         required: true,
       },
+      photo: {
+        type:String
+      },
       date: {
         type: Date,
         required: true,
